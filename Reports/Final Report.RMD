@@ -50,7 +50,7 @@ The response variable in this study is if the blue team win or loss. And the pre
 
 ## Data
 
-The original data has 7620 observations, with winner, "blue" and "red" as the response variable. The primary step is to convert the response variable to categorical variable. Since if the winner is blue team, red team would be defeated. This report is going to perform analysis based on blue team, so if the winner is blue team, the response variable will be equal to 1, otherwise, it will be equal to 0. In this data, the number of blue team win is 4146, and the number of blue team lose is 3474. There are 10 predictor varibales: TopAvg, JungleAvg, MidAvg, ADCAvg, SupportAvg, GameLength, KillDiff, Season, Carry, TeamOfCarry. The first 7 are numeric predictors, while other 3 predictor varibales are categorical. RoleAvg means that the gold difference between two teams for a certain role. If positive, blue team has advantage; if negative, red team has advantage. The boxplots of RoleAvg vs win showed that for every role, the distribution of gold difference will be higher for winning a match than that of losing a match. In other words, earning more golds tend to have a higher chance to win the game. The boxplot of KillDiff vs win showed that the distribution of kill difference by team of win is higher than that of lose. The boxplots of GameLength vs win showed that the distribution of win and lose is about the same, which means that the length of a match has little effects on winning a match (see plot below). This report will investigate the effects of GameLength further in the model fitting process.  
+The original data has 7620 observations[1], with winner, "blue" and "red" as the response variable. The primary step is to convert the response variable to categorical variable. Since if the winner is blue team, red team would be defeated. This report is going to perform analysis based on blue team, so if the winner is blue team, the response variable will be equal to 1, otherwise, it will be equal to 0. In this data, the number of blue team win is 4146, and the number of blue team lose is 3474. There are 10 predictor varibales: TopAvg, JungleAvg, MidAvg, ADCAvg, SupportAvg, GameLength, KillDiff, Season, Carry, TeamOfCarry. The first 7 are numeric predictors, while other 3 predictor varibales are categorical. RoleAvg means that the gold difference between two teams for a certain role. If positive, blue team has advantage; if negative, red team has advantage. The boxplots of RoleAvg vs win showed that for every role, the distribution of gold difference will be higher for winning a match than that of losing a match. In other words, earning more golds tend to have a higher chance to win the game. The boxplot of KillDiff vs win showed that the distribution of kill difference by team of win is higher than that of lose. The boxplots of GameLength vs win showed that the distribution of win and lose is about the same, which means that the length of a match has little effects on winning a match (see plot below). This report will investigate the effects of GameLength further in the model fitting process.  
 
 ``` {r echo=FALSE,fig.height=3, fig.width= 4,fig.align='center'}
 ggplot(games,aes(x=win_fac, y=GameLength, fill=win_fac)) +
@@ -93,9 +93,11 @@ pander(summary(model_step))
 
 The table shows the summary of final model including the interactions of JungleAvg with ADCAvg and TopAvg.
 
-```{r echo=FALSE, results='hide', fig.keep='all', fig.height=3, fig.width=4, fig.align='center'}
-roc(games$win,fitted(model_step),plot=T,print.thres="best",legacy.axes=T,
-    print.auc =T,col="red3")
+```{r fig.width=4,fig.height=5,fig.align="center",echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("ROC.png")
+  grid.raster(img)
 ```
 
 ## Conclusion
@@ -106,7 +108,9 @@ To sum up, earning more gold will help the team to win a match. Mid and ADC play
 
 This study have some limitations, first, the data used for this analysis may not accurate. Second, there might be some overfitting problems. And the predictor gold earn by role itself may not very important to predict the win of a match. The damage did to champion by roles could be more intuitively suitable for predicting the winning.
 
+## Data Source
 
+[1] https://www.kaggle.com/chuckephron/leagueoflegends
 
 
 
